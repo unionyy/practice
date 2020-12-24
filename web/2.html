@@ -25,37 +25,54 @@
                  margin: 0;
                  padding: 20px
             }
-            ol{
+            #grid #list{
                 border-right: 1px solid gray;
-                width: 120px;
+                width: 180px;
                 margin: 0;
-                padding: 20px
+                padding: 5px
+            }
+            #grid{
+                display: grid;
+                grid-template-columns: 200px 1fr;
+            }
+            #grid #article{
+                padding-left: 20px;
             }
         </style>
     </head>
     <body>
         <!-- font tag is not an information!! -->
         <h1><a href="index.html">CHRISTMAS</a></h1>
-        <!-- Ordered List & Unordered List -->
-        <ol>
-            <li><a href="1.html" class="saw">Christmas Card</a></li>
-            <li><a href="2.html" class="saw" id="active">Christmas Date</a></li>
-            <li><a href="3.html">New Year</a></li>
-        </ol>
-        <!--
-        <ol>
-            <li><a href="1.html"><font color="red">Christmas Card</font></a></li>
-            <li><a href="2.html"><font color="red">Christmas Date</font></a></li>
-            <li><a href="3.html"><font color="red">New Year</font></a></li>
-        </ol>
-        -->
-        <ul>
-            <li>UnionKim</li>
-            <li>YoonYeonY</li>
-            <li>Uniony</li>
-        </ul>
-        <h2>Christmas Date</h2>
+
+        <div id="grid">
+            <div id="list">
+                <!-- Ordered List & Unordered List -->
+                <ol>
+                    <li><a href="1.html" class="saw">Christmas Card</a></li>
+                    <li><a href="2.html" class="saw" id="active">Christmas Date</a></li>
+                    <li><a href="3.html">New Year</a></li>
+                </ol>
+                <!--
+                <ol>
+                    <li><a href="1.html"><font color="red">Christmas Card</font></a></li>
+                    <li><a href="2.html"><font color="red">Christmas Date</font></a></li>
+                    <li><a href="3.html"><font color="red">New Year</font></a></li>
+                </ol>
+                -->
+                <ul>
+                    <li>UnionKim</li>
+                    <li>YoonYeonY</li>
+                    <li>Uniony</li>
+                </ul> 
+            </div>
+            
+            <div id="article">
+                <h2>Christmas Date</h2>
+
+                <p>Christmas is <strong>25.Dec</strong>.</p> 
+            </div>
+        </div>
         
-        <p>Christmas is <strong>25.Dec</strong>.</p> 
+        
     </body>
 </html>
