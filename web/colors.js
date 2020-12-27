@@ -1,9 +1,11 @@
 function setColor(color) {
-    var list = document.querySelectorAll('a');
-        list.forEach(e =>
-        {
-            e.style.color=color;
-        })
+    // var list = document.querySelectorAll('a');
+    // list.forEach(e =>
+    // {
+    //         e.style.color=color;
+    // })
+    $('a').css('color', color);
+
 }
 function nightDayHandler(self) {
     var target = document.querySelector('body')
@@ -16,8 +18,12 @@ function nightDayHandler(self) {
         setColor('red');
     }
     else{
-        target.style.backgroundColor = 'white';
-        target.style.color = 'black';
+        // jQuery
+        $('body').css('backgroundColor', 'white');
+        $('body').css('color', 'black');
+
+        // target.style.backgroundColor = 'white';
+        // target.style.color = 'black';
         self.value = 'night';
 
         setColor('green');
