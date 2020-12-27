@@ -3,37 +3,45 @@
     <head>
         <title>New Year</title>
         <meta charset="utf-8">
+        <script>
+            function nightDayHandler(self) {
+                var target = document.querySelector('body')
+                if(self.value === 'night')
+                {
+                    target.style.backgroundColor = 'black';
+                    target.style.color = 'white';
+                    self.value = 'day';
+
+                    var list = document.querySelectorAll('a');
+                    list.forEach(e =>
+                    {
+                        e.style.color='red';
+                    })
+                }
+                else{
+                    target.style.backgroundColor = 'white';
+                    target.style.color = 'black';
+                    self.value = 'night';
+
+                    var list = document.querySelectorAll('a');
+                    for(e of list)
+                    {
+                        e.style.color='blue';
+                    }
+
+                }
+            }
+        </script>
     </head>
     <body>
         <h1><a href="index.html">CHRISTMAS</a></h1>
         <!-- Ordered List & Unordered List -->
         <input id="night_day" type="button" value="night" onclick="
-         var target = document.querySelector('body')
-         if(this.value === 'night')
-         {
-            target.style.backgroundColor = 'black';
-            target.style.color = 'white';
-            this.value = 'day';
-
-            var list = document.querySelectorAll('a');
-            list.forEach(e =>
-            {
-                e.style.color='red';
-            })
-         }
-         else{
-            target.style.backgroundColor = 'white';
-            target.style.color = 'black';
-            this.value = 'night';
-
-            var list = document.querySelectorAll('a');
-            for(e of list)
-            {
-                e.style.color='blue';
-            }
-
-         }
+         nightDayHandler(this);
         ">
+        <input id="night_day" type="button" value="night" onclick="
+        nightDayHandler(this);
+       ">
         <ol>
             <li><a href="1.html">Christmas Card</a></li>
             <li><a href="2.html">Christmas Date</a></li>
