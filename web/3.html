@@ -14,11 +14,23 @@
             target.style.backgroundColor = 'black';
             target.style.color = 'white';
             this.value = 'day';
+
+            var list = document.querySelectorAll('a');
+            list.forEach(e =>
+            {
+                e.style.color='red';
+            })
          }
          else{
             target.style.backgroundColor = 'white';
             target.style.color = 'black';
             this.value = 'night';
+
+            var list = document.querySelectorAll('a');
+            list.forEach(e =>
+            {
+                e.style.color='blue';
+            })
 
          }
         ">
@@ -34,19 +46,5 @@
         </ul>
         <h2>New Year</h2>
         <h3>2021</h3>
-        <input id="night_day" type="button" value="night" onclick="
-         if(this.value === 'night')
-         {
-            document.querySelector('body').style.backgroundColor = 'black';
-            document.querySelector('body').style.color = 'white';
-            this.value = 'day';
-         }
-         else{
-            document.querySelector('body').style.backgroundColor = 'white';
-            document.querySelector('body').style.color = 'black';
-            this.value = 'night';
-
-         }
-        ">
     </body>
 </html>
