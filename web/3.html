@@ -4,6 +4,13 @@
         <title>New Year</title>
         <meta charset="utf-8">
         <script>
+            function setColor(color) {
+                var list = document.querySelectorAll('a');
+                    list.forEach(e =>
+                    {
+                        e.style.color=color;
+                    })
+            }
             function nightDayHandler(self) {
                 var target = document.querySelector('body')
                 if(self.value === 'night')
@@ -12,22 +19,14 @@
                     target.style.color = 'white';
                     self.value = 'day';
 
-                    var list = document.querySelectorAll('a');
-                    list.forEach(e =>
-                    {
-                        e.style.color='red';
-                    })
+                    setColor('red');
                 }
                 else{
                     target.style.backgroundColor = 'white';
                     target.style.color = 'black';
                     self.value = 'night';
 
-                    var list = document.querySelectorAll('a');
-                    for(e of list)
-                    {
-                        e.style.color='blue';
-                    }
+                    setColor('blue');
 
                 }
             }
@@ -39,9 +38,6 @@
         <input id="night_day" type="button" value="night" onclick="
          nightDayHandler(this);
         ">
-        <input id="night_day" type="button" value="night" onclick="
-        nightDayHandler(this);
-       ">
         <ol>
             <li><a href="1.html">Christmas Card</a></li>
             <li><a href="2.html">Christmas Date</a></li>
