@@ -3,34 +3,7 @@
     <head>
         <title>New Year</title>
         <meta charset="utf-8">
-        <script>
-            function setColor(color) {
-                var list = document.querySelectorAll('a');
-                    list.forEach(e =>
-                    {
-                        e.style.color=color;
-                    })
-            }
-            function nightDayHandler(self) {
-                var target = document.querySelector('body')
-                if(self.value === 'night')
-                {
-                    target.style.backgroundColor = 'black';
-                    target.style.color = 'white';
-                    self.value = 'day';
-
-                    setColor('red');
-                }
-                else{
-                    target.style.backgroundColor = 'white';
-                    target.style.color = 'black';
-                    self.value = 'night';
-
-                    setColor('blue');
-
-                }
-            }
-        </script>
+        <script src="colors.js"></script>
     </head>
     <body>
         <h1><a href="index.html">CHRISTMAS</a></h1>
