@@ -81,16 +81,20 @@ var app = http.createServer(function(request,response){
         request.on('data', function(data) {
             body += data;
         });
+        
         request.on('end', function() {
             var post = qs.parse(body);
             var title = post.title;
             var content = post.description;
+            fs.writeFile(`data/${title}`, content, 'utf8', function(err) {
+                response.writeHead(302, {Location: `/?id=${title}`});
+                response.end();
+            });
 
-            console.log(title);
-            console.log(content);
+            // console.log(title);
+            // console.log(content);
         }); 
-        response.writeHead(200);
-        response.end('succ');
+        
     } else {
         // 200: OK, 404: Not OK
         response.writeHead(404);
