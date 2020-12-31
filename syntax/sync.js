@@ -10,5 +10,5 @@ const fs = require('fs');
 console.log('A');
 fs.readFile('synctest.txt', 'utf8', function(err, result) {
     console.log(result);
-})
+});
 console.log('C');
