@@ -9,5 +9,3 @@ This practice follows course on [Coding Everyday](https://opentutorials.org/cour
   * [WEB2 - CSS](https://opentutorials.org/course/3086)
 
   * [WEB2 - JavaScript](https://opentutorials.org/course/3085)
-
-
