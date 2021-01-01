@@ -3,22 +3,24 @@ var fs = require('fs');
 var url = require('url');
 var qs = require('querystring');
 
-function templateHTML(title, list, body, control) {
-    return `
-    <!doctype html>
-    <html>
-        <head>
-            <title>WEB1 - ${title}</title>
-            <meta charset="utf-8">
-        </head>
-        <body>
-            <h1><a href="/">WEB</a></h1>
-            ${list}
-            ${control}
-            ${body}
-        </body>
-    </html>   
-    `;
+var template = {
+    HTML: function (title, list, body, control) {
+        return `
+        <!doctype html>
+        <html>
+            <head>
+                <title>WEB1 - ${title}</title>
+                <meta charset="utf-8">
+            </head>
+            <body>
+                <h1><a href="/">WEB</a></h1>
+                ${list}
+                ${control}
+                ${body}
+            </body>
+        </html>   
+        `;
+    }
 }
 
 var app = http.createServer(function(request,response){
@@ -39,18 +41,18 @@ var app = http.createServer(function(request,response){
             if(queryData.id === undefined) {
                     var title = 'Welcome!';
                     var content = 'Hello, Node.js!';
-                    var template = templateHTML(
+                    var html = template.HTML(
                         title, 
                         list, 
                         `<h2>${title}</h2><p>${content}</p>`, 
                         `<a href="/create">Create</a>`
                     );
                     response.writeHead(200);
-                    response.end(template);
+                    response.end(html);
             } else {
                 fs.readFile('data/'+queryData.id, 'utf8', function(err, content){
                     var title = queryData.id;
-                    var template = templateHTML(
+                    var html = template.HTML(
                         title, 
                         list, 
                         `<h2>${title}</h2><p>${content}</p>`,
@@ -62,7 +64,7 @@ var app = http.createServer(function(request,response){
                         `
                     );
                     response.writeHead(200);
-                    response.end(template);
+                    response.end(html);
                 });
             }
         });
@@ -75,7 +77,7 @@ var app = http.createServer(function(request,response){
             }
             list = list + '</ol>';
             var title = 'Create';
-            var template = templateHTML(
+            var html = template.HTML(
                 title,
                 list,
                 `
@@ -93,7 +95,7 @@ var app = http.createServer(function(request,response){
                 ''
             );
             response.writeHead(200);
-            response.end(template);
+            response.end(html);
         });
     } else if(pathname === '/create_process') {
         var body = '';
@@ -123,7 +125,7 @@ var app = http.createServer(function(request,response){
             list = list + '</ol>';
             fs.readFile('data/'+queryData.id, 'utf8', function(err, content){
                 var title = queryData.id;
-                var template = templateHTML(
+                var html = template.HTML(
                     title, 
                     list, 
                     `
@@ -141,7 +143,7 @@ var app = http.createServer(function(request,response){
                     `<a href="/create">Create</a>`
                 );
                 response.writeHead(200);
-                response.end(template);
+                response.end(html);
             });
         });
 
