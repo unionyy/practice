@@ -1,4 +1,4 @@
-# nodejs-mysql-practice
+# Node.js MySQL Practice
 
 Let's Practice Node.js with MySQL!
 
