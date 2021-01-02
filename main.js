@@ -3,7 +3,7 @@ var fs = require('fs');
 var url = require('url');
 var qs = require('querystring');
 var template = require('./lib/template.js');
-
+var path = require('path');
 
 var app = http.createServer(function(request,response){
     var _url = request.url;
@@ -32,7 +32,8 @@ var app = http.createServer(function(request,response){
                     response.writeHead(200);
                     response.end(html);
             } else {
-                fs.readFile('data/'+queryData.id, 'utf8', function(err, content){
+                var filteredId = path.parse(queryData.id).base;
+                fs.readFile('data/'+filteredId, 'utf8', function(err, content){
                     var title = queryData.id;
                     var html = template.HTML(
                         title, 
@@ -89,6 +90,7 @@ var app = http.createServer(function(request,response){
             var post = qs.parse(body);
             var title = post.title;
             var content = post.description;
+            
             fs.writeFile(`data/${title}`, content, 'utf8', function(err) {
                 response.writeHead(302, {Location: `/?id=${title}`});
                 response.end();
@@ -140,9 +142,11 @@ var app = http.createServer(function(request,response){
             var id = post.id;
             var title = post.title;
             var content = post.description;
-            fs.rename(`data/${id}`, `data/${title}`, function (err) {
-                fs.writeFile(`data/${title}`, content, 'utf8', function(err) {
-                    response.writeHead(302, {Location: `/?id=${title}`});
+            var filteredId = path.parse(id).base;
+            var filteredId1 = path.parse(title).base;
+            fs.rename(`data/${filteredId}`, `data/${filteredId1}`, function (err) {
+                fs.writeFile(`data/${filteredId1}`, content, 'utf8', function(err) {
+                    response.writeHead(302, {Location: `/?id=${filteredId1}`});
                     response.end();
                 });
             });
@@ -157,7 +161,8 @@ var app = http.createServer(function(request,response){
         request.on('end', function() {
             var post = qs.parse(body);
             var id = post.id;
-            fs.unlink(`data/${id}`, (err) => {
+            var filteredId = path.parse(id).base;
+            fs.unlink(`data/${filteredId}`, (err) => {
                 response.writeHead(302, {Location: '/'});
                 response.end();
             });
