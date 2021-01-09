@@ -24,21 +24,21 @@ var app = http.createServer(function(request,response){
     if(pathname === '/'){
       if(queryData.id === undefined){
       //   fs.readdir('./data', function(error, filelist){
-      //     var title = 'Welcome';
-      //     var description = 'Hello, Node.js';
-      //     var list = template.list(filelist);
-      //     var html = template.HTML(title, list,
-      //       `<h2>${title}</h2>${description}`,
-      //       `<a href="/create">create</a>`
-      //     );
+      //     
       //     response.writeHead(200);
       //     response.end(html);
       //   });
 
         db.query('SELECT * FROM topic', function (err, topics) {
-          console.log(topics);
+          var title = 'Welcome';
+          var description = 'Hello, Node.js';
+          var list = template.list(topics);
+          var html = template.HTML(title, list,
+            `<h2>${title}</h2>${description}`,
+            `<a href="/create">create</a>`
+          );
           response.writeHead(200);
-          response.end('Success');
+          response.end(html);
         });
       } else {
         fs.readdir('./data', function(error, filelist){
