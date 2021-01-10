@@ -12,7 +12,7 @@ var db = mysql.createConnection({
   host    : 'localhost',
   user    : 'root',
   password: secure['mysqlpw'],
-  database: 'mytutorials'
+  database: secure['dbname']
 });
 
 db.connect();
@@ -23,12 +23,6 @@ var app = http.createServer(function(request,response){
     var pathname = url.parse(_url, true).pathname;
     if(pathname === '/'){
       if(queryData.id === undefined){
-      //   fs.readdir('./data', function(error, filelist){
-      //     
-      //     response.writeHead(200);
-      //     response.end(html);
-      //   });
-
         db.query('SELECT * FROM topic', function (err, topics) {
           var title = 'Welcome';
           var description = 'Hello, Node.js';
@@ -163,12 +157,16 @@ var app = http.createServer(function(request,response){
       });
       request.on('end', function(){
           var post = qs.parse(body);
-          var id = post.id;
-          var filteredId = path.parse(id).base;
-          fs.unlink(`data/${filteredId}`, function(error){
+          db.query(
+            `DELETE FROM topic WHERE id=?`,
+            [post.id],
+            (err, results) => {
+              if(err) {
+                throw err;
+              }
             response.writeHead(302, {Location: `/`});
             response.end();
-          })
+          });
       });
     } else {
       response.writeHead(404);
