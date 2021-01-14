@@ -33,7 +33,7 @@ app.get('/page/:pageID', (req, res) => {
       var html = template.HTML(sanitizedTitle, list,
         `<h2>${sanitizedTitle}</h2>${sanitizedDescription}`,
         ` <a href="/create">create</a>
-                    <a href="/update?id=${sanitizedTitle}">update</a>
+                    <a href="/update/${sanitizedTitle}">update</a>
                     <form action="delete_process" method="post">
                       <input type="hidden" name="id" value="${sanitizedTitle}">
                       <input type="submit" value="delete">
@@ -78,7 +78,52 @@ app.post('/create_process', (req, res) => {
       res.end();
     })
   });
-})
+});
+
+app.get('/update/:updateID', (req, res) => {
+  fs.readdir('./data', function (error, filelist) {
+    var filteredId = path.parse(req.params.updateID).base;
+    fs.readFile(`data/${filteredId}`, 'utf8', function (err, description) {
+      var title = req.params.updateID;
+      var list = template.list(filelist);
+      var html = template.HTML(title, list,
+        `
+                <form action="/update_process" method="post">
+                  <input type="hidden" name="id" value="${title}">
+                  <p><input type="text" name="title" placeholder="title" value="${title}"></p>
+                  <p>
+                    <textarea name="description" placeholder="description">${description}</textarea>
+                  </p>
+                  <p>
+                    <input type="submit">
+                  </p>
+                </form>
+                `,
+        `<a href="/create">create</a> <a href="/update/${title}">update</a>`
+      );
+      res.send(html);
+    });
+  });
+});
+
+app.post('/update_process', (req, res) => {
+  var body = '';
+  req.on('data', function (data) {
+    body = body + data;
+  });
+  req.on('end', function () {
+    var post = qs.parse(body);
+    var id = post.id;
+    var title = post.title;
+    var description = post.description;
+    fs.rename(`data/${id}`, `data/${title}`, function (error) {
+      fs.writeFile(`data/${title}`, description, 'utf8', function (err) {
+        res.writeHead(302, { Location: `/page/${title}` });
+        res.end();
+      });
+    });
+  });
+});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
@@ -97,51 +142,13 @@ app.listen(port, () => {
 //     if(pathname === '/'){
 //       if(queryData.id === undefined){
 //     } else if(pathname === '/create'){
-//       
+//
 //     } else if(pathname === '/create_process'){
-//       
+//
 //     } else if(pathname === '/update'){
-//       fs.readdir('./data', function(error, filelist){
-//         var filteredId = path.parse(queryData.id).base;
-//         fs.readFile(`data/${filteredId}`, 'utf8', function(err, description){
-//           var title = queryData.id;
-//           var list = template.list(filelist);
-//           var html = template.HTML(title, list,
-//             `
-//             <form action="/update_process" method="post">
-//               <input type="hidden" name="id" value="${title}">
-//               <p><input type="text" name="title" placeholder="title" value="${title}"></p>
-//               <p>
-//                 <textarea name="description" placeholder="description">${description}</textarea>
-//               </p>
-//               <p>
-//                 <input type="submit">
-//               </p>
-//             </form>
-//             `,
-//             `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`
-//           );
-//           response.writeHead(200);
-//           response.end(html);
-//         });
-//       });
+//
 //     } else if(pathname === '/update_process'){
-//       var body = '';
-//       request.on('data', function(data){
-//           body = body + data;
-//       });
-//       request.on('end', function(){
-//           var post = qs.parse(body);
-//           var id = post.id;
-//           var title = post.title;
-//           var description = post.description;
-//           fs.rename(`data/${id}`, `data/${title}`, function(error){
-//             fs.writeFile(`data/${title}`, description, 'utf8', function(err){
-//               response.writeHead(302, {Location: `/?id=${title}`});
-//               response.end();
-//             })
-//           });
-//       });
+//       
 //     } else if(pathname === '/delete_process'){
 //       var body = '';
 //       request.on('data', function(data){
