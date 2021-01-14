@@ -2,10 +2,13 @@ const express = require('express');
 const fs = require('fs');
 const qs = require('querystring');
 const template = require('./lib/template.js');
-const app = express();
 const path = require('path');
 const sanitizeHtml = require('sanitize-html');
+const bodyParser = require('body-parser')
 const port = 3000;
+
+const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (request, response) => {
   fs.readdir('./data', function (error, filelist) {
@@ -65,17 +68,11 @@ app.get('/create', (req, res) => {
 });
 
 app.post('/create_process', (req, res) => {
-  var body = '';
-  req.on('data', function (data) {
-    body = body + data;
-  });
-  req.on('end', function () {
-    var post = qs.parse(body);
-    var title = post.title;
-    var description = post.description;
-    fs.writeFile(`data/${title}`, description, 'utf8', function (err) {
-      res.redirect(`/page/${title}`);
-    })
+  var post = req.body;
+  var title = post.title;
+  var description = post.description;
+  fs.writeFile(`data/${title}`, description, 'utf8', function (err) {
+    res.redirect(`/page/${title}`);
   });
 });
 
@@ -106,35 +103,23 @@ app.get('/update/:updateID', (req, res) => {
 });
 
 app.post('/update_process', (req, res) => {
-  var body = '';
-  req.on('data', function (data) {
-    body = body + data;
-  });
-  req.on('end', function () {
-    var post = qs.parse(body);
-    var id = post.id;
-    var title = post.title;
-    var description = post.description;
-    fs.rename(`data/${id}`, `data/${title}`, function (error) {
-      fs.writeFile(`data/${title}`, description, 'utf8', function (err) {
-        res.redirect(`/page/${title}`);
-      });
+  var post = req.body;
+  var id = post.id;
+  var title = post.title;
+  var description = post.description;
+  fs.rename(`data/${id}`, `data/${title}`, function (error) {
+    fs.writeFile(`data/${title}`, description, 'utf8', function (err) {
+      res.redirect(`/page/${title}`);
     });
   });
 });
 
 app.post('/delete_process', (req, res) => {
-  var body = '';
-  req.on('data', function (data) {
-    body = body + data;
-  });
-  req.on('end', function () {
-    var post = qs.parse(body);
-    var id = post.id;
-    var filteredId = path.parse(id).base;
-    fs.unlink(`data/${filteredId}`, function (error) {
-      res.redirect('/');
-    })
+  var post = req.body;
+  var id = post.id;
+  var filteredId = path.parse(id).base;
+  fs.unlink(`data/${filteredId}`, function (error) {
+    res.redirect('/');
   });
 });
 
