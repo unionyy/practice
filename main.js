@@ -4,55 +4,59 @@ const qs = require('querystring');
 const template = require('./lib/template.js');
 const path = require('path');
 const sanitizeHtml = require('sanitize-html');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const { nextTick } = require('process');
 const port = 3000;
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/', (request, response) => {
+app.get('*', (req, res, next) => {
+  //console.log('my middleware');
   fs.readdir('./data', function (error, filelist) {
-    var title = 'Welcome';
-    var description = 'Hello, Node.js';
-    var list = template.list(filelist);
-    var html = template.HTML(title, list,
-      `<h2>${title}</h2>${description}`,
-      `<a href="/create">create</a>`
-    );
-    response.send(html);
+    req.list = template.list(filelist);
+    next();
   });
+})
+
+app.get('/', (req, res) => {
+  var title = 'Welcome';
+  var description = 'Hello, Node.js';
+  var list = req.list;
+  var html = template.HTML(title, list,
+    `<h2>${title}</h2>${description}`,
+    `<a href="/create">create</a>`
+  );
+  res.send(html);
 });
 
 app.get('/page/:pageID', (req, res) => {
-  fs.readdir('./data', function(error, filelist){
-    var filteredId = path.parse(req.params.pageID).base;
-    fs.readFile(`data/${filteredId}`, 'utf8', function (err, description) {
-      var title = req.params.pageID;
-      var sanitizedTitle = sanitizeHtml(title);
-      var sanitizedDescription = sanitizeHtml(description, {
-        allowedTags: ['h1']
-      });
-      var list = template.list(filelist);
-      var html = template.HTML(sanitizedTitle, list,
-        `<h2>${sanitizedTitle}</h2>${sanitizedDescription}`,
-        ` <a href="/create">create</a>
+  var filteredId = path.parse(req.params.pageID).base;
+  fs.readFile(`data/${filteredId}`, 'utf8', function (err, description) {
+    var title = req.params.pageID;
+    var sanitizedTitle = sanitizeHtml(title);
+    var sanitizedDescription = sanitizeHtml(description, {
+      allowedTags: ['h1']
+    });
+    var list = req.list;
+    var html = template.HTML(sanitizedTitle, list,
+      `<h2>${sanitizedTitle}</h2>${sanitizedDescription}`,
+      ` <a href="/create">create</a>
                     <a href="/update/${sanitizedTitle}">update</a>
                     <form action="/delete_process" method="post">
                       <input type="hidden" name="id" value="${sanitizedTitle}">
                       <input type="submit" value="delete">
                     </form>`
-      );
-      res.writeHead(200);
-      res.end(html);
-    });
+    );
+    res.writeHead(200);
+    res.end(html);
   });
 });
 
 app.get('/create', (req, res) => {
-  fs.readdir('./data', function(error, filelist){
-    var title = 'WEB - create';
-    var list = template.list(filelist);
-    var html = template.HTML(title, list, `
+  var title = 'WEB - create';
+  var list = req.list;
+  var html = template.HTML(title, list, `
               <form action="/create_process" method="post">
                 <p><input type="text" name="title" placeholder="title"></p>
                 <p>
@@ -63,8 +67,7 @@ app.get('/create', (req, res) => {
                 </p>
               </form>
             `, '');
-    res.send(html);
-  });
+  res.send(html);
 });
 
 app.post('/create_process', (req, res) => {
@@ -77,11 +80,10 @@ app.post('/create_process', (req, res) => {
 });
 
 app.get('/update/:updateID', (req, res) => {
-  fs.readdir('./data', function (error, filelist) {
     var filteredId = path.parse(req.params.updateID).base;
     fs.readFile(`data/${filteredId}`, 'utf8', function (err, description) {
       var title = req.params.updateID;
-      var list = template.list(filelist);
+      var list = req.list;
       var html = template.HTML(title, list,
         `
                 <form action="/update_process" method="post">
@@ -99,7 +101,6 @@ app.get('/update/:updateID', (req, res) => {
       );
       res.send(html);
     });
-  });
 });
 
 app.post('/update_process', (req, res) => {
