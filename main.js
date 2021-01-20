@@ -9,6 +9,7 @@ const { nextTick } = require('process');
 const port = 3000;
 
 const app = express();
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('*', (req, res, next) => {
@@ -24,7 +25,9 @@ app.get('/', (req, res) => {
   var description = 'Hello, Node.js';
   var list = req.list;
   var html = template.HTML(title, list,
-    `<h2>${title}</h2>${description}`,
+    `<h2>${title}</h2>${description}
+     <img src="http://localhost:3000/images/hello.jpg" style="width: 400px; display: block; margin-top: 10px;">
+    `,
     `<a href="/create">create</a>`
   );
   res.send(html);
