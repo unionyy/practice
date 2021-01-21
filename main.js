@@ -33,26 +33,31 @@ app.get('/', (req, res) => {
   res.send(html);
 });
 
-app.get('/page/:pageID', (req, res) => {
+app.get('/page/:pageID', (req, res, next) => {
   var filteredId = path.parse(req.params.pageID).base;
   fs.readFile(`data/${filteredId}`, 'utf8', function (err, description) {
-    var title = req.params.pageID;
-    var sanitizedTitle = sanitizeHtml(title);
-    var sanitizedDescription = sanitizeHtml(description, {
-      allowedTags: ['h1']
-    });
-    var list = req.list;
-    var html = template.HTML(sanitizedTitle, list,
-      `<h2>${sanitizedTitle}</h2>${sanitizedDescription}`,
-      ` <a href="/create">create</a>
-                    <a href="/update/${sanitizedTitle}">update</a>
-                    <form action="/delete_process" method="post">
-                      <input type="hidden" name="id" value="${sanitizedTitle}">
-                      <input type="submit" value="delete">
-                    </form>`
-    );
-    res.writeHead(200);
-    res.end(html);
+    if(err) {
+      next(err);
+    } else {
+      var title = req.params.pageID;
+      var sanitizedTitle = sanitizeHtml(title);
+      var sanitizedDescription = sanitizeHtml(description, {
+        allowedTags: ['h1']
+      });
+      var list = req.list;
+      var html = template.HTML(sanitizedTitle, list,
+        `<h2>${sanitizedTitle}</h2>${sanitizedDescription}`,
+        ` <a href="/create">create</a>
+                      <a href="/update/${sanitizedTitle}">update</a>
+                      <form action="/delete_process" method="post">
+                        <input type="hidden" name="id" value="${sanitizedTitle}">
+                        <input type="submit" value="delete">
+                      </form>`
+      );
+      res.writeHead(200);
+      res.end(html);
+    }
+    
   });
 });
 
@@ -82,27 +87,32 @@ app.post('/create_process', (req, res) => {
   });
 });
 
-app.get('/update/:updateID', (req, res) => {
+app.get('/update/:updateID', (req, res, next) => {
     var filteredId = path.parse(req.params.updateID).base;
     fs.readFile(`data/${filteredId}`, 'utf8', function (err, description) {
-      var title = req.params.updateID;
-      var list = req.list;
-      var html = template.HTML(title, list,
-        `
-                <form action="/update_process" method="post">
-                  <input type="hidden" name="id" value="${title}">
-                  <p><input type="text" name="title" placeholder="title" value="${title}"></p>
-                  <p>
-                    <textarea name="description" placeholder="description">${description}</textarea>
-                  </p>
-                  <p>
-                    <input type="submit">
-                  </p>
-                </form>
-                `,
-        `<a href="/create">create</a> <a href="/update/${title}">update</a>`
-      );
-      res.send(html);
+      if(err) {
+        next(err);
+      } else {
+        var title = req.params.updateID;
+        var list = req.list;
+        var html = template.HTML(title, list,
+          `
+                  <form action="/update_process" method="post">
+                    <input type="hidden" name="id" value="${title}">
+                    <p><input type="text" name="title" placeholder="title" value="${title}"></p>
+                    <p>
+                      <textarea name="description" placeholder="description">${description}</textarea>
+                    </p>
+                    <p>
+                      <input type="submit">
+                    </p>
+                  </form>
+                  `,
+          `<a href="/create">create</a> <a href="/update/${title}">update</a>`
+        );
+        res.send(html);
+      }
+      
     });
 });
 
@@ -126,6 +136,19 @@ app.post('/delete_process', (req, res) => {
     res.redirect('/');
   });
 });
+
+//Error Handling
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
+app.use(function (req, res, next) {
+  res.status(404).send("Sorry can't find that!")
+})
+
+
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
