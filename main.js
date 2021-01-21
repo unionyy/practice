@@ -7,8 +7,12 @@ const sanitizeHtml = require('sanitize-html');
 const bodyParser = require('body-parser');
 const { nextTick } = require('process');
 const port = 3000;
-
 const app = express();
+
+const helmet = require('helmet');
+//app.use(helmet());
+
+
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
