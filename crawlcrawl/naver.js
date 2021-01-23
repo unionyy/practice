@@ -8,21 +8,18 @@ var c = new Crawler({
             console.log(error);
         }else{
             var $ = res.$;
-            let ulList = [];
             // $ is Cheerio by default
             //a lean implementation of core jQuery designed specifically for the server
             console.log($("title").text());
-            const $bodyList = $("#NM_NEWSSTAND_DEFAULT_THUMB div._NM_UI_PAGE_CONTAINER div div.tile_view div.thumb_area").children("div.thumb_box");
-            console.log($bodyList.length)
+
+            const $bodyList = $("div.thumb_area").children("div.thumb_box");
+            
+            let newsList = [];
             $bodyList.each(function(i, elem) {
-                ulList[i] = {
-                    image_url: $(this).find('a.thumb img').attr('src'),
-                    image_alt: $(this).find('a.thumb img').attr('alt')
-                };
+                newsList[i] = $(this).find('a.thumb img').attr('alt');
               });
 
-            const data = ulList.filter(n => n.image_alt);
-            console.log(data);
+            console.log(newsList);
         }
         done();
     }
