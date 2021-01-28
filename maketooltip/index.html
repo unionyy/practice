@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>tooltip~</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./tooltipster-master/dist/css/tooltipster.bundle.min.css" />
+        <link rel="stylesheet" type="text/css" href=".\tooltipster-master\dist\css\plugins\tooltipster\sideTip\themes\tooltipster-sideTip-borderless.min.css" />
+        
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="./tooltipster-master/dist/js/tooltipster.bundle.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('.tooltip').tooltipster({
+                    theme: 'tooltipster-borderless',
+                    contentCloning: true
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <!--  Putting a tooltip on an image:  --> 
+        <img src="./images/parrot.png" width="100px" class="tooltip" title="앵무앵무!!" />
+    
+        <!--  Putting a tooltip on some text (span, div or whatever):  --> 
+        <span class="tooltip" title="안녕! 안녕!!">앵무새야 안녕~</span>
+
+        <br>
+
+        <span class="tooltip" data-tooltip-content="#tooltip_content">html 툴팁</span>
+        <span class="tooltip" data-tooltip-content="#tooltip_content">html 툴팁</span>
+        <span class="tooltip" data-tooltip-content="#tooltip_content">html 툴팁</span>
+        <span class="tooltip" data-tooltip-content="#tooltip_content">html 툴팁</span>
+
+        <div class="tooltip_templates">
+            <span id="tooltip_content">
+                <strong>호잇</strong>
+            </span>
+        </div>
+    </body>
+</html>
