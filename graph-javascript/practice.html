@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="kr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Chart!</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.5.6/dist/frappe-charts.min.iife.js"></script>
+
+        <style>
+            .dataset-units {
+                display: none;
+            }
+        </style>
+
+        <script>
+            function Hide(dataset) {
+                if(document.getElementsByClassName(dataset)[0].style.display === 'block') {
+                    document.getElementsByClassName(dataset)[0].style.display = 'none';
+                } else {
+                    document.getElementsByClassName(dataset)[0].style.display = 'block';
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div id="chart"></div>
+        
+        <script>
+            const data = {
+                labels: [
+                    '0min', '1min', '2min', '3min',
+                    '4min', '5min', '6min', '7min',
+                    '8min', '9min', '10min', '11min',
+                    '12min', '13min', '14min', '15min',
+                    '16min', '17min', '18min', '19min',
+                    '20min', '21min', '22min', '23min',
+                    '24min', '25min', '26min', '27min',
+                    '28min', '29min', '30min', '31min',
+                    '32min'
+                ],
+                datasets: [
+                    {
+                        name: "Player 1",
+                        values: [
+                            500, 0, 21, 199, 564, 275, 510,
+                            340, 671, 549, 868, 66, 78, 410,
+                            701, 971, 231, 646, 811, 1241, 99,
+                            146, 712, 140, 485, 483, 711, 237,
+                            410, 1089, 1460, 875, 1171
+                        ]
+                    },
+                    {
+                        name: "Player 2",
+                        values: [
+                            500, 0, 194, 548, 748, 1401,
+                            149, 734, 1231, 214, 336, 949,
+                            1681, 133, 364, 601, 1136, 253,
+                            590, 112, 514, 11, 559, 376,
+                            1214, 37, 544, 117, 719, 1249,
+                            1438, 2007, 276
+                        ]
+                    },
+                    {
+                        name: "Player 3",
+                        values: [
+                            500, 0, 63, 395, 753, 1474,
+                            1845, 55, 111, 544, 865, 344,
+                            394, 735, 1038, 1432, 40, 458,
+                            1057, 276, 399, 770, 1313, 490,
+                            904, 22, 215, 543, 257, 797,
+                            954, 1536, 1992
+                        ]
+                    }
+                ]
+            }
+
+            const chart = new frappe.Chart("#chart", {  // or a DOM element,
+                // new Chart() in case of ES6 module with above usage
+                title: "Current Gold",
+                data: data,
+                type: 'line', // or 'bar', 'line', 'scatter', 'pie', 'percentage'
+                height: 250,
+                //colors: ['#7cd6fd', '#743ee2']
+                lineOptions: {
+                    hideDots: 1, // default: 0
+                    regionFill: 1, // default: 0
+                }
+            })
+        </script>
+
+        <button onclick="Hide('dataset-0')">Player 1</button>
+        <button onclick="Hide('dataset-1')">Player 2</button>
+        <button onclick="Hide('dataset-2')">Player 3</button>
+    </body>
+</html>
